@@ -5,7 +5,8 @@ This is a Django REST Framework (DRF) based API that allows users to:
 - Create, read, update, and delete (CRUD) products
 - Comment on products
 - Search and filter products
-- 
+-
+
 ## Features
 
 ### User Registration
