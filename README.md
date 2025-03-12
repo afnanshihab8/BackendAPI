@@ -15,8 +15,6 @@ This is a Django REST Framework (DRF) based API that allows users to:
 ### Product Management
 - Users can create and list products.
 - Products can be searched and filtered by name or ID.
-
-### Commenting on Products
 - Authenticated users can comment on products.
 - Users can update or delete their own comments.
 
