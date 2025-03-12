@@ -2,10 +2,13 @@ from django.shortcuts import render
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.filters import SearchFilter
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken  
 from .models import Product, Comment
 from .serializers import ProductSerializer, CommentSerializer
+from .permissions import IsOwnerOrReadOnly
 
 # User Registration
 class RegisterUser(APIView):
@@ -23,6 +26,8 @@ class RegisterUser(APIView):
 class ProductListCreate(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name', 'id'] 
 
     def get_permissions(self):
         if self.request.method in ['POST']:
@@ -47,3 +52,8 @@ class CommentCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         product_id = self.kwargs.get("product_id")
         serializer.save(user=self.request.user, product_id=product_id)
+
+class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
