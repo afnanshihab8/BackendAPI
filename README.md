@@ -96,7 +96,7 @@ curl -X POST http://127.0.0.1:8000/api/products/1/comments/ \
      -d '{"content": "This is an awesome product!"}'
 ```
 
-### Update a Comment (Only Author)
+### Update a Comment 
 ```bash
 curl -X PUT http://127.0.0.1:8000/api/comments/1/ \
      -H "Content-Type: application/json" \
@@ -104,7 +104,7 @@ curl -X PUT http://127.0.0.1:8000/api/comments/1/ \
      -d '{"content": "Updated comment!"}'
 ```
 
-### Delete a Comment (Only Author)
+### Delete a Comment 
 ```bash
 curl -X DELETE http://127.0.0.1:8000/api/comments/1/ \
      -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
