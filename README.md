@@ -41,7 +41,7 @@ This is a Django REST Framework (DRF) based API that allows users to:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/afnanshihab8/crudproject.git
+   git clone https://github.com/afnanshihab8/BackendAPI.git
    cd crudproject
    ```
 2. Install dependencies:
