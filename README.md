@@ -5,7 +5,7 @@ This is a Django REST Framework (DRF) based API that allows users to:
 - Create, read, update, and delete (CRUD) products
 - Comment on products
 - Search and filter products
--
+
 
 ## Features
 
@@ -55,56 +55,91 @@ This is a Django REST Framework (DRF) based API that allows users to:
 
 ## Usage
 
-- Use Postman or cURL to interact with the API.
+- Use Postman or Httpie to interact with the API.
 - Authenticate users to access protected endpoints.
 
-## cURL Tests
+## Using HTTPie to Test the API
 
-### Register a New User
-```bash
-curl -X POST http://127.0.0.1:8000/api/register/ \
-     -H "Content-Type: application/json" \
-     -d '{"username": "testuser", "password": "testpass", "email": "test@example.com"}'
+### Obtain Access Token
+Before making authenticated requests, obtain an access token using your credentials:
+```sh
+http POST http://127.0.0.1:8000/api/token/ username="your_username" password="your_password"
+```
+Response:
+```json
+{
+    "refresh": "your_refresh_token",
+    "access": "your_access_token"
+}
 ```
 
-### Obtain JWT Token
-```bash
-curl -X POST http://127.0.0.1:8000/api/token/ \
-     -H "Content-Type: application/json" \
-     -d '{"username": "testuser", "password": "testpass"}'
+### Use Access Token in Requests
+Include the access token in the `Authorization` header:
+```sh
+http GET http://127.0.0.1:8000/api/products/ "Authorization: Bearer your_access_token"
 ```
+
+### Refresh Access Token
+```sh
+http POST http://127.0.0.1:8000/api/token/refresh/ refresh="your_refresh_token"
+```
+
+## CRUD Operations
 
 ### Create a Product (Authenticated)
-```bash
-curl -X POST http://127.0.0.1:8000/api/products/ \
-     -H "Content-Type: application/json" \
-     -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-     -d '{"name": "Laptop", "description": "Gaming Laptop", "price": "2000.00"}'
+```sh
+http POST http://127.0.0.1:8000/api/products/ "Authorization: Bearer your_access_token" name="Nikon Cool Pix" description="Digital Camera" price:=6000
 ```
 
-### Search for a Product
-```bash
-curl -X GET "http://127.0.0.1:8000/api/products/?search=laptop"
+### Get All Products (Public)
+```sh
+http GET http://127.0.0.1:8000/api/products/
 ```
 
-### Add a Comment to a Product
-```bash
-curl -X POST http://127.0.0.1:8000/api/products/1/comments/ \
-     -H "Content-Type: application/json" \
-     -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-     -d '{"content": "This is an awesome product!"}'
+### Update a Product (Authenticated)
+```sh
+http PUT http://127.0.0.1:8000/api/products/1/ "Authorization: Bearer your_access_token" name="Updated Product" description="Updated Description" price:=7000
 ```
 
-### Update a Comment 
-```bash
-curl -X PUT http://127.0.0.1:8000/api/comments/1/ \
-     -H "Content-Type: application/json" \
-     -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-     -d '{"content": "Updated comment!"}'
+### Delete a Product (Authenticated)
+```sh
+http DELETE http://127.0.0.1:8000/api/products/1/ "Authorization: Bearer your_access_token"
 ```
 
-### Delete a Comment 
-```bash
-curl -X DELETE http://127.0.0.1:8000/api/comments/1/ \
-     -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+## Comments
+
+### Add a Comment (Authenticated)
+```sh
+http POST http://127.0.0.1:8000/api/products/1/comments/ "Authorization: Bearer your_access_token" text="Amazinf product!"
 ```
+
+### Get All Comments (Public)
+```sh
+http GET http://127.0.0.1:8000/api/products/1/comments/
+```
+
+### Update a Comment (Authenticated)
+```sh
+http PUT http://127.0.0.1:8000/api/comments/1/ "Authorization: Bearer your_access_token" text="Updated comment"
+```
+
+### Delete a Comment (Authenticated)
+```sh
+http DELETE http://127.0.0.1:8000/api/comments/1/ "Authorization: Bearer your_access_token"
+```
+
+## Additional Features
+
+### Pagination (Public)
+```sh
+http GET http://127.0.0.1:8000/api/products/?page=1
+```
+
+### Search (Public)
+```sh
+http GET http://127.0.0.1:8000/api/products/?search=Cool
+```
+
+
+
+
